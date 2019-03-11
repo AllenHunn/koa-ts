@@ -3,7 +3,7 @@ import * as Router from 'koa-router';
 
 import catController from './cat/cat.controller';
 
-const routes: Router[] = [
+const routers: Router[] = [
   catController,
 ];
 
@@ -13,7 +13,7 @@ function setRoute(router: Router, app: Koa) {
 }
 
 export function setRoutes(app: Koa) {
-  routes.forEach((route) => {
-    setRoute(route, app);
+  routers.forEach((router) => {
+    setRoute(router, app);
   });
 }
