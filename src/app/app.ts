@@ -1,8 +1,7 @@
 import * as Koa from 'koa';
 import * as HttpStatus from 'http-status-codes';
 import * as bodyParser from 'koa-bodyparser';
-
-import catController from './cat/cat.controller';
+import * as routes from './routes';
 
 const app: Koa = new Koa();
 
@@ -19,8 +18,7 @@ app.use(async (ctx: Koa.Context, next: () => Promise<any>) => {
 
 app.use(bodyParser());
 
-app.use(catController.routes());
-app.use(catController.allowedMethods());
+routes.setRoutes(app);
 
 app.use(async (ctx: Koa.Context) => {
   ctx.body = 'Hello World!';
