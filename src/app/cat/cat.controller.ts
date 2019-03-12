@@ -28,7 +28,9 @@ router.get('/:cat_id', async (ctx: Koa.Context) => {
 });
 
 router.post('/', async (ctx: Koa.Context) => {
-  ctx.body = await catService.create(ctx.request.body);
+  const cat = await catService.create(ctx.request.body);
+  ctx.body = cat;
+  ctx.app.emit('catCreated', null, cat);
 });
 
 export default router;

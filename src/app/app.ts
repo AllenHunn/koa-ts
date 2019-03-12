@@ -3,6 +3,7 @@ import * as HttpStatus from 'http-status-codes';
 import * as bodyParser from 'koa-bodyparser';
 import * as routes from './routes';
 import { authMiddleware } from './middleware/auth.middleware';
+import { wireEvents } from './events';
 
 const app: Koa = new Koa();
 
@@ -22,6 +23,8 @@ app.use(authMiddleware);
 app.use(bodyParser());
 
 routes.setRoutes(app);
+
+wireEvents(app);
 
 app.use(async (ctx: Koa.Context) => {
   ctx.body = 'Hello World!';
