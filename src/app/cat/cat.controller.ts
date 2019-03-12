@@ -13,6 +13,7 @@ const router: Router = new Router(routerOpts);
 const catService = new CatService();
 
 router.get('/', async (ctx: Koa.Context) => {
+  ctx.res.setHeader('user', JSON.stringify(ctx.state.user));
   ctx.body = await catService.getAll();
 });
 

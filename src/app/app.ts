@@ -2,6 +2,7 @@ import * as Koa from 'koa';
 import * as HttpStatus from 'http-status-codes';
 import * as bodyParser from 'koa-bodyparser';
 import * as routes from './routes';
+import { authMiddleware } from './middleware/auth.middleware';
 
 const app: Koa = new Koa();
 
@@ -15,6 +16,8 @@ app.use(async (ctx: Koa.Context, next: () => Promise<any>) => {
     ctx.app.emit('error', error, ctx);
   }
 });
+
+app.use(authMiddleware);
 
 app.use(bodyParser());
 
