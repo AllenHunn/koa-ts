@@ -1,7 +1,7 @@
 import { Length, IsInt, Min, Max, IsIn } from 'class-validator';
+import { BaseDTO } from './baseDTO';
 
-export class BaseCatDTO {
-
+export class BaseCatDTO extends BaseDTO {
   @Length(3, 10)
   name: string;
 

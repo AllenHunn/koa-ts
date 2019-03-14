@@ -4,7 +4,6 @@ import * as HttpStatus from 'http-status-codes';
 
 import { CatService } from './cat.service';
 
-import { transformAndValidate } from 'class-transformer-validator';
 import { CreateCatDTO } from './dto/createCatDTO';
 
 const routerOpts: Router.IRouterOptions = {
@@ -14,10 +13,6 @@ const routerOpts: Router.IRouterOptions = {
 const router: Router = new Router(routerOpts);
 
 const catService = new CatService();
-
-async function getValidClass<T extends object>(classType: any, pojo: any): Promise<T> {
-  return await transformAndValidate(classType, pojo) as T;
-}
 
 router.get('/', async (ctx: Koa.Context) => {
   ctx.res.setHeader('user', JSON.stringify(ctx.state.user));
@@ -35,7 +30,7 @@ router.get('/:cat_id', async (ctx: Koa.Context) => {
 });
 
 router.post('/', async (ctx: Koa.Context) => {
-  const createCatDTO = await getValidClass<CreateCatDTO>(CreateCatDTO, ctx.request.body);
+  const createCatDTO = await CreateCatDTO.createValidDTO(ctx.request.body);
   const cat = await catService.create(createCatDTO);
   ctx.body = cat;
   ctx.app.emit('catCreated', null, cat);
