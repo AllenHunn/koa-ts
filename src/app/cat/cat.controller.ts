@@ -3,7 +3,6 @@ import * as Router from 'koa-router';
 import * as HttpStatus from 'http-status-codes';
 
 import { CatService } from './cat.service';
-import { validate } from 'class-validator';
 
 import { transformAndValidate } from 'class-transformer-validator';
 import { CreateCatDTO } from './dto/createCatDTO';
@@ -16,14 +15,8 @@ const router: Router = new Router(routerOpts);
 
 const catService = new CatService();
 
-async function isDataValid(dto: any) {
-  const errors = await validate(dto, { whiteList: true });
-  if (errors.length > 0) {
-    console.log('validation failed', errors.join(','));
-    return false;
-  }
-
-  return true;
+async function getValidClass<T extends object>(classType: any, pojo: any): Promise<T> {
+  return await transformAndValidate(classType, pojo) as T;
 }
 
 router.get('/', async (ctx: Koa.Context) => {
@@ -42,7 +35,7 @@ router.get('/:cat_id', async (ctx: Koa.Context) => {
 });
 
 router.post('/', async (ctx: Koa.Context) => {
-  const createCatDTO = await transformAndValidate(CreateCatDTO, ctx.request.body) as CreateCatDTO;
+  const createCatDTO = await getValidClass<CreateCatDTO>(CreateCatDTO, ctx.request.body);
   const cat = await catService.create(createCatDTO);
   ctx.body = cat;
   ctx.app.emit('catCreated', null, cat);
